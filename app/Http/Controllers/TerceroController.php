@@ -16,16 +16,32 @@ class TerceroController extends Controller
     public function index($id)
     {
         $cuentas = DB::table('cuentas')->where('id_user','=',$id)->get();
-        $users = DB::table('users')->find($id);
-        $externas = DB::table('users')
+        return view('tercero')->with('cuentas',$cuentas);
+    }
+
+
+    public function propia($id)
+    {
+        //$cuentaOrigen = DB::table('cuentas')->find($id);
+        $externas = DB::table('cuentas')
         ->select('externas.*')
-        ->join('cuentas','users.id','=','cuentas.id_user')
         ->join('cue_exts','cuentas.id','=','cue_exts.id_cuenta')
         ->join('externas','cue_exts.id_externa','=','externas.id')
-        ->where('users.id',$id)->get();
+        ->where('cue_exts.id_cuenta',$id)->get();
+        //$cuentaDestino = DB::table('externas')->find($id);
         dd($externas);
-        //return $externas;
-        //return view('tercero')->with('cuentas',$cuentas)->with('users',$users)->with('externas',$externas);
+        return view('cuentaexterna')->with('externas',$externas)->with('id',$id);
+    }
+
+    public function cuentaExterna(Request $request)
+    {
+        $externas = DB::table('cuentas')
+        ->select('externas.*')
+        ->join('cue_exts','cuentas.id','=','cue_exts.id_cuenta')
+        ->join('externas','cue_exts.id_externa','=','externas.id')
+        ->where('cue_exts.id_cuenta',$request->origen)->get();
+        //$cuentaDestino = DB::table('externas')->find($id);
+        return view('cuentaexterna')->with('externas',$externas)->with('idOrigen',$request->origen);
     }
 
     /**
@@ -46,16 +62,13 @@ class TerceroController extends Controller
      */
     public function store(Request $request)
     {
-        $cuentaOrigen = DB::table('cuentas')->find($request->origen);
+        $cuentaOrigen = DB::table('cuentas')->find($request->idOrigen);
         $cuentaDestino = DB::table('externas')->find($request->destino);
-        return $request;
         $control = true;
         $mensajeError = "";
+        ///dd($cuentaOrigen);
+        //dd($cuentaDestino);
 
-        if($request->origen == $request->destino){
-            $control = false;
-            $mensajeError .= "No puedes hacer transferencia entre la misma cuenta.</br>";
-        }
         if($request->monto <= 0){
             $control = false;
             $mensajeError .= "El monto de transferencia debe ser superior a CERO</br>";
@@ -77,7 +90,7 @@ class TerceroController extends Controller
             $valorOrigen = $cuentaOrigen->monto - $request->monto;
             $valorDestino = $cuentaDestino->monto + $request->monto;
 
-            DB::table('cuentas')->where('id',$request->origen)
+            DB::table('cuentas')->where('id',$request->idOrigen)
             ->update(['monto'=>$valorOrigen]);
             DB::table('externas')->where('id',$request->destino)
             ->update(['monto'=>$valorDestino]);
@@ -87,13 +100,15 @@ class TerceroController extends Controller
                 'cuenta_destino' => $cuentaDestino->cuenta,
                 'tipo_cuenta' => "Terceros",
                 'monto' => $request->monto,
-                'id_origen' => $request->origen,
+                'id_origen' => $request->idOrigen,
                 'id_destino' => $request->destino
             ]);
             
         }
-
-        return $request;
+        echo($mensajeError);
+        //return ($mensajeError);
+        $transacciones = DB::table('transferencias')->get();
+        return view('lista')->with('transacciones',$transacciones);
     }
 
     /**

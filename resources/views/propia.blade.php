@@ -10,12 +10,10 @@
    </select>
 
    <div class="form-group row">
-    <div class="col-sm-10">
         <button type="submit"
         class="btn btn-primary"
         value="transferir">
             Ir a transferencia
         </button>
-    </div>
   </div>
 </form>

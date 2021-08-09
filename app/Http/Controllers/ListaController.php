@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ListaController extends Controller
 {
@@ -11,15 +12,15 @@ class ListaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexCuenta(Request $request)
+    public function index()
     {
-        return $request;
-        //return view('lista');
+        $transacciones = DB::table('transferencias')->get();
+        return view('lista')->with('transacciones',$transacciones);
     }
 
     public function indexTercero(Request $request)
     {
-        return $request;
+        //return $request;
         //return view('lista');
     }
 

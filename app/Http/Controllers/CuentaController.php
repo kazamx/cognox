@@ -87,8 +87,10 @@ class CuentaController extends Controller
             ]);
             
         }
+            echo($mensajeError);
 
-        return $mensajeError;
+            $transacciones = DB::table('transferencias')->get();
+            return view('lista')->with('transacciones',$transacciones);
     }
 
     /**

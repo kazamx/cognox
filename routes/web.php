@@ -18,9 +18,11 @@ Route::get('/', function () {
 Route::get('/',[IngresarController::class,'index'])->name('index');
 Route::post('/inicio',[IngresarController::class,'store'])->name('inicio');
 Route::get('/cuenta/{id}',[CuentaController::class,'index'])->name('cuenta');
-Route::get('/tercero/{id}',[TerceroController::class,'index'])->name('tercero');
 Route::post('/cuenta',[CuentaController::class,'store'])->name('cuentastore');
+Route::get('/lista',[ListaController::class,'index'])->name('lista');
+Route::get('/tercero/{id}',[TerceroController::class,'index'])->name('tercero');
 Route::post('/tercero',[TerceroController::class,'store'])->name('tercerostore');
-Route::get('/listaGeneral',[ListaController::class,'indexGeneral'])->name('listaGeneral');
+Route::post('/cuentaexterna',[TerceroController::class,'cuentaExterna'])->name('cuentaexterna');
+//Route::get('/propia/{id}',[TerceroController::class,'index'])->name('propia');
 
 Auth::routes();

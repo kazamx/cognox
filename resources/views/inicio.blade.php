@@ -11,11 +11,12 @@
         name="list"
         id="clist"
         class="form-control"
-        href="{{route('listaGeneral')}}"
+        href="{{route('lista')}}"
         >
             Lista de transacciones
         </a>
     </div>
+
     <div>
         <a
         value=""
