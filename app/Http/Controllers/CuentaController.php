@@ -87,7 +87,7 @@ class CuentaController extends Controller
             ]);
             
         }
-            echo($mensajeError);
+            echo("<h2 class='alert alert-danger'>".$mensajeError."<h2>");
 
             $transacciones = DB::table('transferencias')->get();
             return view('lista')->with('transacciones',$transacciones);

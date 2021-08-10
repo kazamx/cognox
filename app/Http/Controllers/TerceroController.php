@@ -105,7 +105,7 @@ class TerceroController extends Controller
             ]);
             
         }
-        echo($mensajeError);
+        echo("<h2 class='alert alert-danger'>".$mensajeError."<h2>");
         //return ($mensajeError);
         $transacciones = DB::table('transferencias')->get();
         return view('lista')->with('transacciones',$transacciones);

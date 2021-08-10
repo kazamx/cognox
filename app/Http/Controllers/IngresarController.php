@@ -33,7 +33,6 @@ class IngresarController extends Controller
         foreach($usuarios as $usuario){
             if(($usuario->cedula == $request->cedula) and
                  ($usuario->password == $request->password)){
-                     echo("Coincide cédula: $usuario->cedula y $usuario->password" );
                     return view('inicio')->with('usuario',$usuario);
             }
         }
